@@ -10,7 +10,7 @@ stages {
 
     stage('Git Checkout') {
         steps {
-            git url: 'https://github.com/aabathorat11/shoppingassistantservice.git', branch: 'main'
+            git url: 'https://github.com/QuntamVector/shoppingassistantservice.git', branch: 'main'
         }
     }
 
@@ -53,7 +53,7 @@ stages {
                             echo "gitops directory exists. Removing it..."
                             rm -rf gitops
                         fi
-                       git clone git@github.com:aabathorat11/GitOps.git
+                        git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/QuntamVector/GitOps.git gitops
                         cd gitops/base/shoppingassistantservice/ 
 
                         git config user.email "jenkins@ci.com"
