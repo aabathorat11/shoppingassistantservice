@@ -49,9 +49,9 @@ stages {
                     passwordVariable: 'GIT_PASSWORD'
                 )]) {
                     sh '''
-                        if [ -d "gitops" ]; then
-                            echo "gitops directory exists. Removing it..."
-                            rm -rf gitops
+                        if [ -d "Gitops" ]; then
+                            echo "Gitops directory exists. Removing it..."
+                            rm -rf Gitops
                         fi
                         git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/aabathorat11/GitOps.git Gitops
                         cd gitops/base/shoppingassistantservice/ 
