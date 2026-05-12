@@ -53,8 +53,8 @@ stages {
                             echo "gitops directory exists. Removing it..."
                             rm -rf gitops
                         fi
-                        git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/aabathorat11/GitOps.git
-                        cd Gitops/base/shoppingassistantservice/ 
+                       git clone git@github.com:aabathorat11/GitOps.git
+                        cd gitops/base/shoppingassistantservice/ 
 
                         git config user.email "jenkins@ci.com"
                         git config user.name "jenkins"
