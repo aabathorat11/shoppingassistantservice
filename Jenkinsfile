@@ -42,30 +42,21 @@ stages {
     }
 
         stage('Update GitOps Deployment') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'github-creds',
-                    usernameVariable: 'GIT_USERNAME',
-                    passwordVariable: 'GIT_PASSWORD'
-                )]) {
-                    sh '''
-                        if [ -d "gitops" ]; then
-                            echo "gitops directory exists. Removing it..."
-                            rm -rf gitops
-                        fi
-                        git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/QuntamVector/GitOps.git gitops
-                        cd gitops/base/shoppingassistantservice/ 
-
-                        git config user.email "jenkins@ci.com"
-                        git config user.name "jenkins"
-
-                        # Update image tag
-                        sed -i "s|image: .*shoppingassistantservice.*|image: ${IMAGE_NAME}|g" deployment.yaml
-
-                        git add .
-                        git commit -m "Update shoppingassistantservice image to ${IMAGE_NAME}"
-                        git push origin main
-                    '''
+   steps {
+       dir('gitops') {
+           git branch: 'main',
+               credentialsId: 'github-creds',
+               url: 'https://github.com/aabathorat11/GitOps.git'
+       }
+       sh """
+       cd gitops/base/shoppingassistantservice/
+       git config user.email "jenkins@ci.com"
+       git config user.name "jenkins"
+       sed -i 's|image: .*shoppingassistantservice.*|image: ${IMAGE_NAME}|g' deployment.yaml
+       git add .
+       git commit -m "Update shoppingassistantservice image to ${IMAGE_NAME}" || echo "No changes"
+       git push origin main
+                    
                 }
             }
         }
