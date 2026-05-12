@@ -46,18 +46,18 @@ stages {
                 withCredentials([usernamePassword(
                     credentialsId: 'github-creds',
                     usernameVariable: 'GIT_USERNAME',
-                    passwordVariable: 'GIT_PASSWORD'
+                    passwordVariable: 'GIT_TOKEN'
                 )]) {
                     sh '''
                         if [ -d "gitops" ]; then
                             echo "gitops directory exists. Removing it..."
                             rm -rf gitops
                         fi
-                        git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/aabathorat11/GitOps.git gitops
-                        cd gitops/base/shoppingassistantservice/ 
+                        git clone https://${USER}:${GIT_TOKEN}@github.com/aabathorat11/GitOps.git gitops
+                        cd gitops/base/shippingservice/
 
                         git config user.email "jenkins@ci.com"
-                        git config user.name "jenkins"
+                        git config user.name "aabathorat11"
 
                         # Update image tag
                         sed -i "s|image: .*shoppingassistantservice.*|image: ${IMAGE_NAME}|g" deployment.yaml
