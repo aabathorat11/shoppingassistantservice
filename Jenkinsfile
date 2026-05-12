@@ -53,6 +53,7 @@ stages {
                             echo "gitops directory exists. Removing it..."
                             rm -rf gitops
                         fi
+                        git config --global credential.helper store
                         git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/aabathorat11/GitOps.git gitops
                         cd gitops/base/shoppingassistantservice/ 
 
