@@ -57,7 +57,7 @@ stages {
                         cd gitops/base/shippingservice/
 
                         git config user.email "jenkins@ci.com"
-                        git config user.name "aabathorat11"
+                        git config user.name "jenkins"
 
                         # Update image tag
                         sed -i "s|image: .*shoppingassistantservice.*|image: ${IMAGE_NAME}|g" deployment.yaml
