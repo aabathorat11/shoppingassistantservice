@@ -42,34 +42,32 @@ stages {
     }
 
         stage('Update GitOps Deployment') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'github-creds',
-                    usernameVariable: 'GIT_USERNAME',
-                    passwordVariable: 'GIT_TOKEN'
-                )]) {
-                    sh '''
-                        if [ -d "gitops" ]; then
-                            echo "gitops directory exists. Removing it..."
-                            rm -rf gitops
-                        fi
-                        git clone https://${USER}:${GIT_TOKEN}@github.com/aabathorat11/GitOps.git gitops
-                        cd gitops/base/shippingservice/
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'github-creds',
+            usernameVariable: 'GIT_USERNAME',
+            passwordVariable: 'GIT_PASSWORD'
+        )]) {
+            sh '''
+                if [ -d "GitOps" ]; then
+                    rm -rf GitOps
+                fi
 
-                        git config user.email "jenkins@ci.com"
-                        git config user.name "jenkins"
+                git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/aabathorat11/GitOps.git
+                cd GitOps/base/authservice/
 
-                        # Update image tag
-                        sed -i "s|image: .*shoppingassistantservice.*|image: ${IMAGE_NAME}|g" deployment.yaml
+                git config user.email "jenkins@ci.com"
+                git config user.name "jenkins"
 
-                        git add .
-                        git commit -m "Update shoppingassistantservice image to ${IMAGE_NAME}"
-                        git push origin main
-                    '''
-                    
-                }
-            }
+                sed -i -E "s|(image:\\s*).*/authservice:.*|\\1${IMAGE_NAME}|g" deployment.yaml
+
+                git add deployment.yaml
+                git diff --cached --quiet || git commit -m "Update authservice image to ${IMAGE_NAME}"
+                git push origin main
+            '''
         }
+    }
+}
 
 }
 
